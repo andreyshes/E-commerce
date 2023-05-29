@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const { afterFind } = require("../../config/connection");
+const { afterFind } = require("../../config/connection").default;
 const { Category, Product } = require("../../models");
 
 // The `/api/categories` endpoint
