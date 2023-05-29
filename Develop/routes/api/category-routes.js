@@ -1,14 +1,14 @@
 const router = require("express").Router();
-const { afterFind } = require("../../config/connection").default;
 const { Category, Product } = require("../../models");
 
 // The `/api/categories` endpoint
 
 router.get("/", async (req, res) => {
 	// find all categories
-	// be sure to include its associated Products
 	try {
 		const categoryAll = await Category.findAll({
+			// be sure to include its associated Products
+
 			include: [
 				{
 					model: Product,
@@ -24,7 +24,6 @@ router.get("/", async (req, res) => {
 
 router.get("/:id", async (req, res) => {
 	// find one category by its `id` value
-	// be sure to include its associated Products
 	try {
 		const categoryOne = await Category.findOne({
 			where: {
@@ -58,8 +57,10 @@ router.post("/", async (req, res) => {
 			category_name: req.body.category_name,
 		});
 		if (!newCategory) {
-			res.status(404).json({ message: "No new category created" });
+			res.status(404).json({ message: "No new category created!" });
+			return;
 		}
+
 		res.status(200).json(newCategory);
 	} catch (err) {
 		res.status(500).json(err);
@@ -69,13 +70,14 @@ router.post("/", async (req, res) => {
 router.put("/:id", async (req, res) => {
 	// update a category by its `id` value
 	try {
-		const updateCatergory = await Category.update(req.body, {
+		const updateCategory = await Category.update(req.body, {
 			where: {
 				id: req.params.id,
 			},
 		});
-		if (!updateCatergory) {
-			res.status(404).json({ message: "NO new updated cateogry!" });
+		if (!updateCategory) {
+			res.status(404).json({ message: "No new category updated!" });
+			return;
 		}
 		res.status(200).json(updateCategory);
 	} catch (err) {
@@ -86,12 +88,11 @@ router.put("/:id", async (req, res) => {
 router.delete("/:id", async (req, res) => {
 	// delete a category by its `id` value
 	try {
-		const deleteCategory = await Category.destroy(req.body, {
+		const deleteCategory = await Category.destroy({
 			where: {
 				id: req.params.id,
 			},
 		});
-
 		if (!deleteCategory) {
 			res.status(404).json({ message: "No deleted category!" });
 			return;

@@ -5,9 +5,10 @@ const { Tag, Product, ProductTag } = require("../../models");
 
 router.get("/", async (req, res) => {
 	// find all tags
-	// be sure to include its associated Product data
 	try {
-		const allTags = await Tag.findAll({
+		const tagAll = await Tag.findAll({
+			// be sure to include its associated Products
+
 			include: [
 				{
 					model: Product,
@@ -15,7 +16,7 @@ router.get("/", async (req, res) => {
 				},
 			],
 		});
-		res.status(200).json(allTags);
+		res.status(200).json(tagAll);
 	} catch (err) {
 		res.status(500).json(err);
 	}
@@ -23,9 +24,9 @@ router.get("/", async (req, res) => {
 
 router.get("/:id", async (req, res) => {
 	// find a single tag by its `id`
-	// be sure to include its associated Product data
 	try {
-		const singleTag = await Tag.findOne({
+		const tagOne = await Tag.findOne({
+			// be sure to include its associated Products
 			where: {
 				id: req.params.id,
 			},
@@ -36,7 +37,7 @@ router.get("/:id", async (req, res) => {
 				},
 			],
 		});
-		res.status(200).json(singleTag);
+		res.status(200).json(tagOne);
 	} catch (err) {
 		res.status(500).json(err);
 	}
@@ -63,7 +64,7 @@ router.put("/:id", async (req, res) => {
 			},
 		});
 		if (!updateTag) {
-			res.status(404).json({ messgae: " Could not update tag by given id" });
+			res.status(404).json({ message: "No new tag update!" });
 			return;
 		}
 		res.status(200).json(updateTag);
@@ -81,7 +82,7 @@ router.delete("/:id", async (req, res) => {
 			},
 		});
 		if (!deleteTag) {
-			res.status(404).json({ message: "No deleted tag" });
+			res.status(404).json({ message: "No deleted tag!" });
 			return;
 		}
 		res.status(200).json(deleteTag);
